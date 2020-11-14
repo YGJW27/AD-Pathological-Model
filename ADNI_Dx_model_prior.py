@@ -17,6 +17,15 @@ label[label == 'Dementia'] = 2
 label = label.astype('int')
 X = keep_3_status_table.loc[:, ['PTEDUCAT', 'MMSE', 'LDELTOTAL', 'CDMEMORY', 'CDGLOBAL']]
 
+# prior
+X.loc[X['PTEDUCAT'] >= 16, 'PTEDUCAT'] = 16
+X.loc[X['PTEDUCAT'] <= 7, 'PTEDUCAT'] = 7
+X.loc[X['CDGLOBAL'] >= 1, 'CDGLOBAL'] = 1
+X.loc[X['CDMEMORY'] >= 1, 'CDMEMORY'] = 1
+X.loc[X['MMSE'] <= 15, 'MMSE'] = 15
+X.loc[X['LDELTOTAL'] <= 2, 'LDELTOTAL'] = 2
+X.loc[X['LDELTOTAL'] >= 9, 'LDELTOTAL'] = 9
+
 MMSE_miss = keep_3_status_table['MMSE'].isna()
 LDEL_miss = keep_3_status_table['LDELTOTAL'].isna()
 MEMO_miss = (keep_3_status_table['CDMEMORY'].isna()) | (keep_3_status_table['CDMEMORY'] == -1)
@@ -41,4 +50,4 @@ pred_y = clf.predict(X_no_missing)
 print(classification_report(label_no_missing, pred_y, target_names=['CN', 'MCI', 'Dementia']))
 dot_data = tree.export_graphviz(clf, out_file=None, feature_names=X.columns, class_names=['CN', 'MCI', 'Dementia'], filled=True, rounded=True, special_characters=True)
 graph = graphviz.Source(dot_data)
-graph.render('D:/AD_tree_100')
+graph.render('D:/AD_tree_prior_100')
