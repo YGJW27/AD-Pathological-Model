@@ -1,4 +1,4 @@
-# merge ADNIMERGE and CDR key variables
+# select key attributes from merge table, and filter out short term subjects
 import pandas as pd
 
 Root_Path = 'D:/Project/ADNI_Short/'
