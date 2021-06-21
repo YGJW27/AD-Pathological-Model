@@ -1,8 +1,8 @@
 # select key attributes from merge table, and filter out short term subjects
 import pandas as pd
 
-Root_Path = 'D:/Project/ADNI_Short/'
-ADNIMERGE = 'Study_Info/Data___Database/ADNIMERGE.csv'
+Root_Path = 'D:/Project/ADNI_Short/Study_Info/'
+ADNIMERGE = 'Data___Database/ADNIMERGE.csv'
 OUTPUT = 'D:/selected_data_ADNI.csv'
 
 merge_table = pd.read_csv(Root_Path + ADNIMERGE, low_memory=False)
@@ -22,9 +22,8 @@ id_iter = selected[selected.duplicated(subset=['RID'])==False].RID
 thres = 36
 for id in id_iter:
     long_flag = (selected[selected.RID == id].M >= thres).any()
-    if id == 6624:
-        if long_flag == False:
-            selected = selected[selected.RID != id]
+    if long_flag == False:
+        selected = selected[selected.RID != id]
 
 selected = selected.sort_values(by=['RID','M'])
 
