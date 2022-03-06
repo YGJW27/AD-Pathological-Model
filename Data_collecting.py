@@ -18,12 +18,12 @@ selected = selected.drop_duplicates(subset=['RID', 'M'])
 
 id_iter = selected[selected.duplicated(subset=['RID'])==False].RID
 
-# Filter out subjects with examine less than 6 months
-thres = 36
-for id in id_iter:
-    long_flag = (selected[selected.RID == id].M >= thres).any()
-    if long_flag == False:
-        selected = selected[selected.RID != id]
+# # Filter out subjects with examine less than 6 months
+# thres = 36
+# for id in id_iter:
+#     long_flag = (selected[selected.RID == id].M >= thres).any()
+#     if long_flag == False:
+#         selected = selected[selected.RID != id]
 
 selected = selected.sort_values(by=['RID','M'])
 
