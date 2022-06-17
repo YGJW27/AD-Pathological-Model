@@ -4,7 +4,7 @@ rstan_options(auto_write = TRUE)
 
 
 
-N <- 201
+N <- 101
 T <- seq(0, N-1, by=1)
 k_pos <- 5
 k_neg <- 5
@@ -50,10 +50,10 @@ for (n in 1:N){
 
 
 model.file <- "C:/Users/shear/Documents/R/Gamma_wiener.stan"
-ad_dat <- list(N = N, T = T, y = y, pois_max = 20, effect_pos=effect_pos, effect_neg=effect_neg, m=m)
-fit <- stan(file = model.file, data = ad_dat, chains = 2, iter=5000)
+ad_dat <- list(N = N, T = T, y = y, effect_pos=effect_pos, effect_neg=effect_neg)
+fit <- stan(file = model.file, data = ad_dat, chains = 2, iter=20000)
 
-print(fit)
+print(fit, pars=list("mu","omega_neg"), include=TRUE)
 plot(fit)
 traceplot(fit, pars=list("omega_pos","omega_neg"), include=TRUE)
 pairs(fit, pars = c("mu", "tau", "lp__"))

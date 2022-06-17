@@ -3,17 +3,11 @@ data {
   int<lower=0> N;
   int<lower=0> T[N];
   real y[N];
-  int<lower=0> pois_max;
   real<lower=0> effect_pos[N-1];
   real<lower=0> effect_neg[N-1];
-  real m[N];
 }
 
 transformed data {
-  real dm[N-1];
-  for (n in 1:(N-1)){
-    dm[n] = m[n+1] - m[n];
-  }
 }
 
 parameters {
@@ -21,7 +15,8 @@ parameters {
   real<lower=0> omega_pos;
   real<lower=0> omega_neg;
   real c_mu;
-
+  
+  real m[N];
   real<lower=0> sigma;
   
   real h_0;
@@ -32,6 +27,11 @@ parameters {
 transformed parameters {
   real mu[N-1];
   real mu_ob[N];
+  real dm[N-1];
+
+  for (n in 1:(N-1)){
+    dm[n] = m[n+1] - m[n];
+  }
   
   for (n in 1:N-1){
     mu[n] = c_mu * tanh(omega_pos * effect_pos[n]
@@ -43,10 +43,12 @@ transformed parameters {
 }
 
 model {
-  //omega_pos ~ normal(1, 0.01);
-  //omega_neg ~ normal(1, 0.01);
-  //omega_0 ~ normal(0, 0.01);
-  //mu_0 ~ normal(0, 0.01); 
+  omega_pos ~ normal(3, 0.01);
+  omega_neg ~ normal(1.5, 0.01);
+  omega_0 ~ normal(-1, 0.01);
+  h_0 ~ normal(10, 0.01);
+  h_1 ~ normal(1, 0.01);
+  
   m[1] ~ normal(0, 0.01);
   
   for (n in 1:(N-1))
