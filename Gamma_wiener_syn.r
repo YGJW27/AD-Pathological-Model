@@ -111,10 +111,10 @@ ad_dat <- list(N_sample = NS, N_vec = syn_data$N_vec,
                effect_neg=syn_data$effect_neg_total)
 
 ad_init <- function() {
-  list(d = syn_data$d_total)
+  list()
 }
 
-fit <- stan(file = model.file, data = ad_dat, init = ad_init, chains = 1, iter=5000)
+fit <- stan(file = model.file, data = ad_dat, chains = 2, iter=5000)
 
 print(fit, pars=list("mu", "m", "mu_ob", "dm"), include=TRUE)
 print(fit, pars=list("mu", "m", "mu_ob", "dm"), include=FALSE)
