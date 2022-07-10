@@ -35,6 +35,7 @@ parameters {
 transformed parameters {
   real m[N_total];
   real mu[N_total - N_sample];
+  real sigma_t[N_total - N_sample];
   real d[N_total];
   real alpha[N_total - N_sample];
   real mu_ob[N_total];
@@ -49,6 +50,7 @@ transformed parameters {
         m[n+1] = m[n] + dm[n-idx+1];
         mu[n-idx+1] = c_mu * tanh(omega_pos * effect_pos[n-idx+1]
             - omega_neg * effect_neg[n-idx+1] + omega_d * d[n] + omega_0) * (T[n+1] - T[n]);
+        sigma_t[n-idx+1] = sigma * sqrt(T[n+1] - T[n]);
         d[n+1] = d[n] + dd[n-idx+1];
         alpha[n-idx+1] = c_ga * inv_logit(m[n]) * (T[n+1] - T[n]);
       }
@@ -65,19 +67,19 @@ model {
   omega_neg ~ normal(0.1, 0.01);
   omega_d ~ normal(0.05, 0.001);
   omega_0 ~ normal(0, 0.01);
-  c_mu ~ normal(3, 0.01);
-  c_ga ~ normal(10, 0.01);
-  beta ~ normal(10, 0.01);
+  c_mu ~ normal(3, 0.1);
+  c_ga ~ normal(10, 0.1);
+  beta ~ normal(10, 0.1);
 
-  h_0 ~ normal(30, 0.01);
-  h_d ~ normal(-1, 0.01);
-  h_m ~ normal(-0.5, 0.01);
+  h_0 ~ normal(30, 0.1);
+  h_d ~ normal(-1, 0.1);
+  h_m ~ normal(-0.5, 0.1);
 
-  m_0 ~ normal(0, 0.01);
-  d_0 ~ normal(0, 0.01);
+  m_0 ~ normal(0, 1);
+  d_0 ~ normal(0, 1);
 
   for (n in 1:(N_total - N_sample)){
-    dm[n] ~ normal(mu[n], sigma);
+    dm[n] ~ normal(mu[n], sigma_t[n]);
     dd[n] ~ gamma(alpha[n], beta);
   }
 
