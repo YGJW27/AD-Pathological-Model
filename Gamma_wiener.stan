@@ -63,20 +63,21 @@ transformed parameters {
 }
 
 model {
-  omega_pos ~ normal(0.1, 0.01);
-  omega_neg ~ normal(0.1, 0.01);
-  omega_d ~ normal(0.05, 0.001);
-  omega_0 ~ normal(0, 0.01);
+  omega_pos ~ normal(0.1, 0.1);
+  omega_neg ~ normal(0.1, 0.1);
+  omega_d ~ normal(0.05, 0.01);
+  omega_0 ~ normal(0, 0.1);
   c_mu ~ normal(3, 0.1);
-  c_ga ~ normal(10, 0.1);
-  beta ~ normal(10, 0.1);
+  sigma ~ normal(0.5, 0.1);
+  c_ga ~ normal(5, 1);
+  beta ~ normal(10, 1);
 
-  h_0 ~ normal(30, 0.1);
-  h_d ~ normal(-1, 0.1);
+  h_0 ~ normal(30, 1);
+  h_d ~ normal(-1, 1);
   h_m ~ normal(-0.5, 0.1);
 
-  m_0 ~ normal(0, 1);
-  d_0 ~ normal(0, 1);
+  m_0 ~ normal(0, 10);
+  d_0 ~ normal(0, 10);
 
   for (n in 1:(N_total - N_sample)){
     dm[n] ~ normal(mu[n], sigma_t[n]);
