@@ -46,18 +46,42 @@ for (n in 1:NROW(APOE4_list)){
 
 model.file <- "D:/Documents/R/AD_Gamma_wiener.stan"
 ad_dat <- list(N_sample = NS, N_vec = N_vec, 
-               N_total = NROW(T_total), T = T_total, 
+               N_total = NROW(T_total), T = T_total/6, 
                y = MMSE_total, z_1 = z_1)
 
 fit <- stan(file = model.file, data = ad_dat, chains = 2, 
-            iter = 5000, warmup = 3000,
-            control=list(max_treedepth=10, adapt_delta=0.8))
+            iter = 10000, warmup = 6000,
+            control=list(max_treedepth=12, adapt_delta=0.8))
 
 print(fit, 
       pars=list("omega_0", "omega_1", "omega_d", "c_mu", "sigma", 
                 "c_ga", "beta", "h_0", "h_d", "h_m", "sigma_ep"), 
       include=TRUE)
-print(fit, 
-      pars=list("d", "m","dd","dm"), 
-      include=TRUE)
 
+mcmc_dens_overlay(
+  fit,
+  pars = c("omega_0", "omega_1", "omega_d", "c_mu", "sigma", 
+           "c_ga", "beta", "h_0", "h_d", "h_m", "sigma_ep"),
+  prob = 0.8, # 80% intervals
+  prob_outer = 0.99, # 99%
+  point_est = "mean"
+)
+
+print(fit, 
+      pars=list("d"), 
+      include=TRUE)
+print(fit, 
+      pars=list("m"), 
+      include=TRUE)
+print(fit, 
+      pars=list("dd"), 
+      include=TRUE)
+print(fit, 
+      pars=list("dm"), 
+      include=TRUE)
+print(fit, 
+      pars=list("m_0"), 
+      include=TRUE)
+print(fit, 
+      pars=list("d_0"), 
+      include=TRUE)

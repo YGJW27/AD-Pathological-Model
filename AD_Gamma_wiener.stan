@@ -13,19 +13,19 @@ transformed data {
 parameters {
   real omega_0;
   real omega_1;
-  real omega_d;
-  real c_mu;
-  real<lower=0.009,upper=0.011> sigma;
+  real<lower=0> omega_d;
+  real<lower=0> c_mu;
+  real<lower=0> sigma;
   real m_0[N_sample];
   real dm[N_total - N_sample];
 
   real<lower=0> c_ga;
   real<lower=0> beta;
-  real d_0[N_sample];
+  real<lower=0> d_0[N_sample];
   real<lower=0> dd[N_total - N_sample];
 
-  real h_0;
-  real h_d;
+  real<lower=0> h_0;
+  real<upper=0> h_d;
   real h_m;
   real<lower=0> sigma_ep;
 }
@@ -60,21 +60,21 @@ transformed parameters {
 }
 
 model {
-  omega_1 ~ normal(1, 0.5);
-  omega_d ~ normal(0.5, 1);
-  omega_0 ~ normal(0.5, 1);
-  c_mu ~ normal(3, 5);
-  sigma ~ normal(0.01, 0.1);
-  c_ga ~ normal(2, 5);
-  beta ~ normal(3, 5);
+  omega_1 ~ normal(0.9, 0.01);
+  omega_d ~ normal(0.4, 0.01);
+  omega_0 ~ normal(0.15, 0.01);
+  c_mu ~ normal(1.52, 0.01);
+  sigma ~ normal(0.53, 0.01);
+  c_ga ~ normal(5, 0.03);
+  beta ~ normal(6, 0.03);
 
-  h_0 ~ normal(28.5, 1);
-  h_d ~ normal(-1, 5);
-  h_m ~ normal(-0.5, 5);
-  sigma_ep ~ normal(1.2, 1);
+  h_0 ~ normal(29.5, 0.01);
+  h_d ~ normal(-0.6, 0.01);
+  h_m ~ normal(0, 0.1);
+  sigma_ep ~ normal(0.5, 0.01);
 
-  m_0 ~ normal(0, 10);
-  d_0 ~ normal(0, 10);
+  m_0 ~ normal(0, 5);
+  d_0 ~ normal(0, 5);
 
   for (n in 1:(N_total - N_sample)){
     dm[n] ~ normal(mu[n], sigma_t[n]);
