@@ -84,7 +84,7 @@ generate_data <- function(NS, N, k_pos, k_neg, lambda_pos, lambda_neg,
        dm_total=dm_total, d_total=d_total, dd_total=dd_total)
 }
 
-setting=1
+setting=2
 switch(setting, 
        a={N <- 21
        k_pos <- 5
@@ -115,14 +115,14 @@ switch(setting,
        omega_d <- 0.05
        omega_0 <- 0
        c_mu <- 3
-       sigma <- 0.01
+       sigma <- 0.5
        c_ga <- 10
        beta <- 10
        h_0 <- 30
        h_d <- -1
        h_m <- -0.5
-       sigma_ep <- 0.5
-       NS <- 2},
+       sigma_ep <- 1
+       NS <- 10},
        
        c={N <- 21
        k_pos <- 5
@@ -143,7 +143,7 @@ switch(setting,
        sigma_ep <- 0.5
        NS <- 2})
 
-set.seed(1)
+set.seed(10)
 syn_data <- generate_data(NS, N, k_pos, k_neg, lambda_pos, lambda_neg,
                           omega_pos, omega_neg, omega_d, omega_0, c_mu, sigma,
                           c_ga, beta, h_0, h_d, h_m, sigma_ep)
@@ -157,8 +157,8 @@ ad_dat <- list(N_sample = NS, N_vec = syn_data$N_vec,
                effect_neg=syn_data$effect_neg_total)
 
 fit <- stan(file = model.file, data = ad_dat, chains = 3, 
-            iter = 5000, warmup = 2500,
-            control=list(max_treedepth=10, adapt_delta=0.8))
+            iter = 10000, warmup = 6000,
+            control=list(max_treedepth=10))
 
 print(fit, 
       pars=list("omega_0", "omega_pos", "omega_neg", "omega_d", "c_mu", "sigma", 

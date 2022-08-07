@@ -14,10 +14,10 @@ transformed data {
 parameters {
   real omega_0;
   real<lower=0> omega_pos;
-  real<lower=0> omega_neg;
+  real<upper=0> omega_neg;
   real omega_d;
   real c_mu;
-  real<lower=0.009,upper=0.011> sigma;
+  real<lower=0> sigma;
   real m_0[N_sample];
   real dm[N_total - N_sample];
 
@@ -26,7 +26,7 @@ parameters {
   real d_0[N_sample];
   real<lower=0> dd[N_total - N_sample];
 
-  real h_0;
+  real<lower=0, upper=30> h_0;
   real h_d;
   real h_m;
   real<lower=0> sigma_ep;
@@ -63,18 +63,19 @@ transformed parameters {
 }
 
 model {
-  omega_pos ~ normal(0.1, 0.1);
-  omega_neg ~ normal(0.1, 0.1);
-  omega_d ~ normal(0.05, 0.01);
-  omega_0 ~ normal(0, 0.1);
+  omega_pos ~ normal(0.1, 0.01);
+  omega_neg ~ normal(-0.1, 0.01);
+  omega_d ~ normal(0.05, 0.001);
+  omega_0 ~ normal(0, 0.01);
   c_mu ~ normal(3, 0.1);
-  sigma ~ normal(0.5, 0.1);
-  c_ga ~ normal(5, 1);
-  beta ~ normal(10, 1);
+  sigma ~ normal(0.5, 0.01);
+  c_ga ~ normal(10, 0.1);
+  beta ~ normal(10, 0.1);
 
-  h_0 ~ normal(30, 1);
-  h_d ~ normal(-1, 1);
-  h_m ~ normal(-0.5, 0.1);
+  h_0 ~ normal(29.5, 0.1);
+  h_d ~ normal(-1, 0.01);
+  h_m ~ normal(-0.5, 0.01);
+  sigma ~ normal(1, 0.01);
 
   m_0 ~ normal(0, 10);
   d_0 ~ normal(0, 10);
